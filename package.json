@@ -2,10 +2,10 @@
   "name": "bloglist",
   "version": "1.0.0",
   "description": "Blog list application for Part4 of Full Stack Open",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.js"
+    "dev": "nodemon index.js"
   },
   "author": "Tim Fau",
   "license": "ISC",
