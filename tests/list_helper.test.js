@@ -231,3 +231,26 @@ describe('most blogs', () => {
     )
   })
 })
+
+describe('most likes', () => {
+  test('when list has one blog', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result).toEqual(
+      { author: 'Tim Fau', likes: 5 }
+    )
+  })
+
+  test('when list has multiple blogs 1', () => {
+    const result = listHelper.mostLikes(listWithSixBlogs)
+    expect(result).toEqual(
+      { author: 'Edsger W. Dijkstra', likes: 17 }
+    )
+  })
+
+  test('when list has multiple blogs 2', () => {
+    const result = listHelper.mostLikes(listWithTenBlogs)
+    expect(result).toEqual(
+      { author: 'Chris Coyier', likes: 32 }
+    )
+  })
+})
