@@ -13,7 +13,7 @@ const totalLikes = (blogs) => {
         (accumulator, currentValue) => accumulator + currentValue,
         initialValue
     )
-    info(returnValue)
+    // info(returnValue)
     return returnValue
 }
 
@@ -24,7 +24,7 @@ const favoriteBlog = (blogs) => {
     const returnValue = blogs.reduce(
         (accumulator, currentValue) => accumulator.likes > currentValue.likes ? accumulator : currentValue
     )
-    info(returnValue)
+    // info(returnValue)
     return returnValue
 }
 
@@ -38,7 +38,7 @@ const mostBlogs = (blogs) => {
         author: authorWithMostBlogs[0].author,
         blogs: authorWithMostBlogs.length
     }
-    info(returnValue)
+    // info(returnValue)
     return returnValue
 }
 
@@ -55,7 +55,7 @@ const mostLikes = (blogs) => {
         author: authorWithMostLikesName,
         likes: authorWithMostLikesTotal
     }
-    info(returnValue)
+    // info(returnValue)
     return returnValue
 }
 
