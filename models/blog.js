@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 const config = require('./../utils/config')
 
 const blogSchema = new mongoose.Schema({
-    title: String,
+    title: { type: String, required: [true, "Title is a required field."] },
     author: String,
-    url: String,
+    url: { type: String, required: [true, "URL is a required field."] },
     likes: Number
 })
 

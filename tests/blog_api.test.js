@@ -94,27 +94,54 @@ describe('blogs are able to be added and deleted', () => {
     // TODO: Add test for deleting blogs
 })
 
-test('unique identifier is named "id"', async () => {
-  const response = await api.get('/api/blogs')
+describe('validate fields', () => {
+  test('unique identifier is named "id"', async () => {
+    const response = await api.get('/api/blogs')
+  
+    expect(response.body[0].id).toBeDefined()
+  })
+  
+  test('if likes property is missing, value defaults to 0', async () => {
+    const newBlog = {
+      "title": "No Likes",
+      "author": "Tim Fau",
+      "url": "http://google.com"
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect(response => {
+        expect(response.body.likes).toEqual(0)
+      })
+  
+  })
 
-  expect(response.body[0].id).toBeDefined()
+  test('if title is missing, backend returns 400', async () => {
+    const newBlog = {
+      "author": "Guy who doesn't like titles",
+      "url": "http://google.com",
+      "likes": 4
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
+
+  test('if URL is missing, backend returns 400', async () => {
+    const newBlog = {
+      "title": "No URL",
+      "author": "Tim Fau",
+      "likes": 4
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
 })
 
-test('if likes property is missing, value defaults to 0', async () => {
-  const newBlog = {
-    "title": "No Likes",
-    "author": "Tim Fau",
-    "url": "http://google.com"
-}
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect(response => {
-      expect(response.body.likes).toEqual(0)
-    })
-
-})
 
 afterAll(async () => {
     await mongoose.connection.close()
