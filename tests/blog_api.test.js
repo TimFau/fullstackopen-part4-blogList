@@ -95,12 +95,25 @@ describe('blogs are able to be added and deleted', () => {
 })
 
 test('unique identifier is named "id"', async () => {
+  const response = await api.get('/api/blogs')
+
+  expect(response.body[0].id).toBeDefined()
+})
+
+test('if likes property is missing, value defaults to 0', async () => {
+  const newBlog = {
+    "title": "No Likes",
+    "author": "Tim Fau",
+    "url": "http://google.com"
+}
   await api
-    .get('/api/blogs')
-    .expect(200)
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
     .expect(response => {
-      expect(response.body[0].id).toBeDefined()
+      expect(response.body.likes).toEqual(0)
     })
+
 })
 
 afterAll(async () => {
