@@ -94,6 +94,15 @@ describe('blogs are able to be added and deleted', () => {
     // TODO: Add test for deleting blogs
 })
 
+test('unique identifier is named "id"', async () => {
+  await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect(response => {
+      expect(response.body[0].id).toBeDefined()
+    })
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
