@@ -91,7 +91,15 @@ describe('blogs are able to be added and deleted', () => {
         expect(titles).toContain('Integration Test')
     })
 
-    // TODO: Add test for deleting blogs
+    test('blog is able to be deleted', async () => {
+      const blogToDelete = await Blog.findOne({ title: initialBlogs[0].title })
+      const idToDelete = blogToDelete.id
+      await api
+        .delete(`/api/blogs/${idToDelete}`)
+        .expect(204)
+      const blogsAfterDeletion = await api.get('/api/blogs')
+      expect(blogsAfterDeletion.body.length).toEqual(initialBlogs.length -1)
+    })
 })
 
 describe('validate fields', () => {
