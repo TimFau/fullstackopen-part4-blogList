@@ -150,6 +150,58 @@ describe('validate fields', () => {
   })
 })
 
+describe('an individual blog post can be updated', () => {
+  const blog = initialBlogs[0]
+
+  test('title can be updated', async () => {
+    const newTitle = "New Title"
+    const blogToUpdate = await Blog.findOne({ title: blog.title })
+    const idToUpdate = blogToUpdate.id
+
+    const updatedBlog = await api
+      .post(`/api/blogs/${idToUpdate}`)
+      .send( { title: newTitle } )
+
+    expect(updatedBlog.body.title).toEqual(newTitle)
+  })
+
+  test('author can be updated', async () => {
+    const newAuthor = "Test Man"
+    const blogToUpdate = await Blog.findOne({ title: blog.title })
+    const idToUpdate = blogToUpdate.id
+
+    const updatedBlog = await api
+      .post(`/api/blogs/${idToUpdate}`)
+      .send( { author: newAuthor } )
+
+    expect(updatedBlog.body.author).toEqual(newAuthor)
+  })
+
+  test('url can be updated', async () => {
+    const newURL = "https://google.com/new"
+    const blogToUpdate = await Blog.findOne({ title: blog.title })
+    const idToUpdate = blogToUpdate.id
+
+    const updatedBlog = await api
+      .post(`/api/blogs/${idToUpdate}`)
+      .send( { url: newURL } )
+
+    expect(updatedBlog.body.url).toEqual(newURL)
+  })
+
+  test('likes can be updated', async () => {
+    const newLikes = blog.likes + 5
+    const blogToUpdate = await Blog.findOne({ title: blog.title })
+    const idToUpdate = blogToUpdate.id
+
+    const updatedBlog = await api
+      .post(`/api/blogs/${idToUpdate}`)
+      .send( { likes: newLikes } )
+
+    expect(updatedBlog.body.likes).toEqual(newLikes)
+  })
+
+})
 
 afterAll(async () => {
     await mongoose.connection.close()

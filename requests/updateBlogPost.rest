@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs/64812d5d7d7ce9e145a66cfe HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Modified Blog Post",
+    "author": "Modified Author",
+    "url": "https://google.com/modified",
+    "likes": 7
+}
