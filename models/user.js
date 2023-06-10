@@ -2,8 +2,17 @@ const mongoose = require('mongoose')
 const config = require('./../utils/config')
 
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: [true, "Username is a required field." ], unique: true},
-    password: { type: String, required: [true, "Password is a required field." ]},
+    username: { 
+        type: String,
+        required: [true, "This is a required field." ],
+        minLength: [3, 'Username must be at least 3 characters long'],
+        unique: true
+    },
+    password: { 
+        type: String,
+        required: [true, "This is a required field." ],
+        minLength: [3, 'Password must be at least 3 characters long'],
+    },
     name: { type: String, required: [true, "Name is a required field." ]}
 })
 

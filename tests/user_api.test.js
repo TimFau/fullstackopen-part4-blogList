@@ -88,7 +88,7 @@ describe('validate fields for creating user', () => {
       expect(response.body[0].id).toBeDefined()
     })
   
-    test('if username is missing, backend returns 400', async () => {
+    test('if username is missing, backend returns 400 and an error message', async () => {
       const newUser = {
         "name": "Tim Fau",
         "password": "123"
@@ -97,9 +97,12 @@ describe('validate fields for creating user', () => {
         .post('/api/users')
         .send(newUser)
         .expect(400)
+        .expect(response => {
+            expect(response.body.message).toEqual('User validation failed: username: This is a required field.')
+        })
     })
   
-    test('if password is missing, backend returns 400', async () => {
+    test('if password is missing, backend returns 400 and an error message', async () => {
       const newUser = {
         "username": "testMan2",
         "name": "Tim Fau"
@@ -108,6 +111,9 @@ describe('validate fields for creating user', () => {
         .post('/api/users')
         .send(newUser)
         .expect(400)
+        .expect(response => {
+            expect(response.error.text).toEqual('Password is a required field.')
+        })
     })
   })
   
