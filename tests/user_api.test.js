@@ -3,24 +3,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
-
-const initialUsers = [
-    {
-        "username": "tdog",
-        "name": "Tim Fau",
-        "password": "123"
-    },
-    {
-        "username": "Testman",
-        "name": "Test Man",
-        "password": "1234"
-    },
-    {
-        "username": "rainMan",
-        "name": "Test Again",
-        "password": "12345"
-    }
-]
+const { initialUsers } = require('../utils/tests_helper.js');
 
 beforeEach(async() => {
     await User.deleteMany({})
