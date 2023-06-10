@@ -1,0 +1,4 @@
+Get http://localhost:3003/api/users HTTP/1.1
+content-type: application/json
+
+{}
