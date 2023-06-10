@@ -6,7 +6,8 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "test-list": "npm test -- tests/list_helper.test.js",
-    "test-api": "npm test -- tests/blog_api.test.js",
+    "test-blogs": "npm test -- tests/blog_api.test.js",
+    "test-users": "npm test -- tests/user_api.test.js",
     "dev": "nodemon index.js",
     "dev-test": "cross-env NODE_ENV=test nodemon index.js"
   },

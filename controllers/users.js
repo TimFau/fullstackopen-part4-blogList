@@ -24,16 +24,16 @@ usersRouter.get('/:id', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
     const { username, name, password } = request.body
 
-    const saltRounds = 10; // TODO: readup on what this means
-    const passwordHash = await bcrypt.hash(password, saltRounds)
-
-    const user = new User({
-        username,
-        name,
-        password: passwordHash
-    })
-
     try {
+        const saltRounds = 10; // TODO: readup on what this means
+        const passwordHash = await bcrypt.hash(password, saltRounds)
+
+        const user = new User({
+            username,
+            name,
+            password: passwordHash
+        })
+
         const savedUser = await user.save() 
         response.status(201).json(savedUser)
     } catch (error) {
@@ -46,17 +46,22 @@ usersRouter.post('/', async (request, response) => {
 usersRouter.post('/:id', async (request, response) => {
     const body = request.body
     const id = request.params.id
-
-    const saltRounds = 10; // TODO: readup on what this means
-    const passwordHash = await bcrypt.hash(body.password, saltRounds)
-
-    const user = {
-        password: passwordHash,
-        name: body.name
-    }
+    const user = {}
 
     if(body.username) {
         response.status(400).send('Username cannot be changed')
+        return;
+    }
+
+    if (body.name) {
+        user.name = body.name
+    }
+
+    if (body.password) {
+        const saltRounds = 10; // TODO: readup on what this means
+        const passwordHash = await bcrypt.hash(body.password, saltRounds)
+
+        user.password = passwordHash
     }
 
     try {
