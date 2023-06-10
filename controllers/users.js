@@ -9,16 +9,16 @@ usersRouter.get('/', async (request, response) => {
 })
 
 // Get a single user by ID
-// usersRouter.get('/:id', async (request, response) => {
-//     const id = request.params.id
+usersRouter.get('/:id', async (request, response) => {
+    const id = request.params.id
 
-//     try {
-//         const user = await User.findById(id)
-//         response.json(user)
-//     } catch (error) {
-//         response.status(400).send(error)
-//     }
-// })
+    try {
+        const user = await User.findById(id)
+        response.json(user)
+    } catch (error) {
+        response.status(400).send(error)
+    }
+})
 
 // Create a user
 usersRouter.post('/', async (request, response) => {
@@ -43,35 +43,40 @@ usersRouter.post('/', async (request, response) => {
 })
 
 // Update an existing user
-// usersRouter.post('/:id', async (request, response) => {
-//     const body = request.body
-//     const id = request.params.id
+usersRouter.post('/:id', async (request, response) => {
+    const body = request.body
+    const id = request.params.id
 
-//     const user = {
-//         title: body.title,
-//         author: body.author,
-//         url: body.url,
-//         likes: body.likes
-//     }
+    const saltRounds = 10; // TODO: readup on what this means
+    const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
-//     try {
-//         const updatedUser = await User.findByIdAndUpdate(id, user, { new: true })
-//         response.json(updatedUser)
-//     } catch (error) {
-//         response.status(400).send(error)
-//     }
-// })
+    const user = {
+        password: passwordHash,
+        name: body.name
+    }
+
+    if(body.username) {
+        response.status(400).send('Username cannot be changed')
+    }
+
+    try {
+        const updatedUser = await User.findByIdAndUpdate(id, user, { new: true })
+        response.json(updatedUser)
+    } catch (error) {
+        response.status(400).send(error)
+    }
+})
 
 // Delete a user
-// usersRouter.delete('/:id', async (request, response) => {
-//     const id = request.params.id
+usersRouter.delete('/:id', async (request, response) => {
+    const id = request.params.id
 
-//     try {
-//         await User.findByIdAndDelete(id)
-//         response.status(204).end()
-//     } catch (error) {
-//         response.status(400).send(error)
-//     }
-// })
+    try {
+        await User.findByIdAndDelete(id)
+        response.status(204).end()
+    } catch (error) {
+        response.status(400).send(error)
+    }
+})
 
 module.exports = usersRouter
