@@ -5,7 +5,11 @@ const blogSchema = new mongoose.Schema({
     title: { type: String, required: [true, "Title is a required field."] },
     author: String,
     url: { type: String, required: [true, "URL is a required field."] },
-    likes: Number
+    likes: Number,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 blogSchema.set('toJSON', {

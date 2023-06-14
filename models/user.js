@@ -13,7 +13,13 @@ const userSchema = new mongoose.Schema({
         required: [true, "This is a required field." ],
         minLength: [3, 'Password must be at least 3 characters long'],
     },
-    name: { type: String, required: [true, "Name is a required field." ]}
+    name: { type: String, required: [true, "Name is a required field." ]},
+    blogs: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Blog'
+        }
+    ]
 })
 
 userSchema.set('toJSON', {

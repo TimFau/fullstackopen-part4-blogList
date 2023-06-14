@@ -4,18 +4,14 @@ const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 const { initialBlogs } = require('../utils/tests_helper.js');
-// const User = require('../models/user')
+const User = require('../models/user')
 
 beforeEach(async() => {
     await Blog.deleteMany({})
-    // const user = await User.findOne()
+    const user = await User.findOne()
     for (let i = 0; i < initialBlogs.length; i += 1) {
         const blog = initialBlogs[i]
-        // blog.user = {
-        //   username: user.username,
-        //   name: user.name,
-        //   id: user.id
-        // }
+        blog.user = user.id
         let blogObject = new Blog(blog)
         await blogObject.save()
     }

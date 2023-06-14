@@ -3,11 +3,15 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
+const Blog = require('../models/blog')
 const { initialUsers } = require('../utils/tests_helper.js');
 
 beforeEach(async() => {
     await User.deleteMany({})
+    const blog = Blog.findOne()
     for (let i = 0; i < initialUsers.length; i += 1) {
+        const user = initialUsers[i]
+        user.blogs = [blog.id]
         let userObject = new User(initialUsers[i])
         await userObject.save()
     }
