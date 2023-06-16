@@ -1,8 +1,9 @@
 POST http://localhost:3003/api/blogs HTTP/1.1
 content-type: application/json
+Authorization: bearer [token_here]
 
 {
-    "title": "Type wars",
+    "title": "Type wars 9",
     "author": "Robert C. Martin",
     "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
     "likes": 2
