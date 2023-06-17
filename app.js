@@ -6,9 +6,11 @@ const blogsRouter = require('./controllers/blogs')
 const User = require('./models/user');
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
+const middleware = require('./middleware')
 
 app.use(cors())
 app.use(express.json())
+app.use(middleware.tokenExtractor)
 
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
