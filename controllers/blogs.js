@@ -77,10 +77,39 @@ blogsRouter.post('/:id', async (request, response) => {
 // Delete a blog
 blogsRouter.delete('/:id', async (request, response) => {
     const id = request.params.id
+    const token = request.token
+    let isUsersBlog = false
+
+    if (!token) {
+        return response.status(401).json({ error: 'missing token '})
+    }
+
+    const blog = await Blog.findById(id)
+    if (!blog) {
+        return response.status(401).json({ error: 'blog with that ID not found' })
+    } 
+    try {
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+        if (!decodedToken.id) {
+            return response.status(401).json({ error: 'try block - invalid token' })
+        }
+        const user = await User.findById(decodedToken.id)
+        const userId = user.id.toString()
+        const blogOwnerId = blog.user.toString()
+        if (blogOwnerId === userId) {
+            isUsersBlog = true
+        }
+    } catch (error) {
+        return response.status(401).json({ error: 'catch block - invalid token' })
+    }
 
     try {
-        await Blog.findByIdAndDelete(id)
-        response.status(204).end()
+        if (isUsersBlog) {
+            await Blog.findByIdAndDelete(id)
+            response.status(204).end()
+        } else {
+            return response.status(401).json({ error: 'unable to delete blog of another user' })
+        }
     } catch (error) {
         response.status(400).send(error)
     }
