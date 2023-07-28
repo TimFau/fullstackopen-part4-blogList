@@ -8,6 +8,18 @@ const tokenExtractor = (request, response, next) => {
     next()
 }
 
+const jwt = require('jsonwebtoken')
+
+const userExtractor = (request, response, next) => {
+    try {
+        const decodedToken = jwt.verify(request.token, process.env.SECRET)
+        request.user = decodedToken
+    } catch {}
+
+    next()
+}
+
 module.exports = {
-    tokenExtractor
+    tokenExtractor,
+    userExtractor
 }
