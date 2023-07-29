@@ -5,13 +5,22 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const { initialBlogs } = require('../utils/tests_helper.js');
 const User = require('../models/user')
+const { initialUsers } = require('../utils/tests_helper.js');
+
+let token = ''
 
 beforeEach(async() => {
     await Blog.deleteMany({})
-    const user = await User.findOne()
+    await User.deleteMany({})
+    const newUser = initialUsers[0];
+    const newUserResponse = await api.post('/api/users').send(newUser)
+    const newUserId = newUserResponse.body.id
+
+    const loginResponse = await api.post('/api/login').send({ username: newUser.username, password: newUser.password})
+    token = loginResponse.body.token
     for (let i = 0; i < initialBlogs.length; i += 1) {
         const blog = initialBlogs[i]
-        blog.user = user.id
+        blog.user = newUserId
         let blogObject = new Blog(blog)
         await blogObject.save()
     }
@@ -43,9 +52,18 @@ describe('blogs are able to be added and deleted', () => {
         "likes": 1
     }
 
+    test('api returns 401 if token is not provided', async () => {
+      await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(401)
+          .expect('Content-Type', /application\/json/)
+  })
+
     test('blog is able to be added', async () => {
         await api
             .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
             .send(newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/)
@@ -62,6 +80,7 @@ describe('blogs are able to be added and deleted', () => {
       const idToDelete = blogToDelete.id
       await api
         .delete(`/api/blogs/${idToDelete}`)
+        .set('Authorization', `bearer ${token}`)
         .expect(204)
       const blogsAfterDeletion = await api.get('/api/blogs')
       expect(blogsAfterDeletion.body.length).toEqual(initialBlogs.length -1)
@@ -83,6 +102,7 @@ describe('validate fields', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect(response => {
@@ -99,6 +119,7 @@ describe('validate fields', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(400)
   })
@@ -111,6 +132,7 @@ describe('validate fields', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(400)
   })
